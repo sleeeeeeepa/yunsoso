@@ -112,11 +112,9 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
     public void dir(Html html){
 
         try {
-
             if(html.xpath("//*[@class=\"share-error error-box\"]").match()){
                 return;
             }
-
             Element body = html.getDocument().body();
             String html1 = body.html();
 

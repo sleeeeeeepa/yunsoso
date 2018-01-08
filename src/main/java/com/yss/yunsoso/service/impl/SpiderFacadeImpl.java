@@ -6,6 +6,7 @@ import com.yss.yunsoso.spdier.BaiduYunFindFileFromBaidu;
 import com.yss.yunsoso.pipline.MysqlPipeline;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.PhantomJSDownloader;
 
@@ -14,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 @Service
+@Transactional
 @Lazy(false)
 public class SpiderFacadeImpl implements SpiderFacade {
 
@@ -24,8 +26,7 @@ public class SpiderFacadeImpl implements SpiderFacade {
 
     @Override
     public boolean getSpider(String keyword) {
-        String s = keyword;
-        String moviesName = "\""+s+"\" ";
+        String moviesName = "\""+keyword+"\" ";
         String postfix = "\"pan.baidu.com\"";
         try {
             moviesName = URLEncoder.encode(moviesName, "gb2312");
