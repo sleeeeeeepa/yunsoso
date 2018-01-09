@@ -4,7 +4,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.yss.yunsoso.domain.YunBean;
+import org.apache.http.protocol.HTTP;
 import org.jsoup.nodes.Element;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -13,11 +16,14 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 
+import javax.swing.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
+
+@Component
 public class BaiduYunFindFileFromBaidu implements PageProcessor {
 
     private Site site = Site.me()
