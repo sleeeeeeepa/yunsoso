@@ -17,7 +17,7 @@
 	<packaging>jar</packaging>
 
 	<name>yunsoso</name>
-	<description>Demo project for Spring Boot</description>
+	<description>BaiduYun spdier</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
