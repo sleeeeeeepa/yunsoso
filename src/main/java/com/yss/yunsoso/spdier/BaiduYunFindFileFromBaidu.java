@@ -142,7 +142,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                 }else if (jsonObject.getInteger("isdir")==0){
                     YunBean bean = new YunBean();
                     bean.setFileName(jsonObject.getString("server_filename"));
-                    //                    bean.setAuthor();
+//                    bean.setAuthor();
                     bean.setSize(getPrintSize(jsonObject.getLong("size")));
                     bean.setUrl(page.getUrl().get().replaceFirst("list","link"));
                     System.out.println(bean);
