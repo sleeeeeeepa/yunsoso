@@ -6,8 +6,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.yss.yunsoso.domain.YunBean;
 import org.apache.http.protocol.HTTP;
 import org.jsoup.nodes.Element;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -16,15 +19,22 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 
+import javax.annotation.Resource;
 import javax.swing.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Component
+//@Scope("prototype")
 public class BaiduYunFindFileFromBaidu implements PageProcessor {
+
+    @Autowired
+    private JedisPool jedisPool;
 
     private Site site = Site.me()
             .setDomain("pan.baidu.com/")
@@ -39,10 +49,6 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
             .addHeader("Cookie","BAIDUID=D3CF67F8FAB389C2953BEE6C64DB9585:FG=1; BIDUPSID=D3CF67F8FAB389C2953BEE6C64DB9585; PSTM=1504325830; PANWEB=1; Hm_lvt_9d483e9e48ba1faa0dfceaf6333de846=1511274755,1511274922,1511275316,1511695518; BDUSS=21zbzhtUzNVWGhxT2RZfnN1UkVDM2FoZDU0eUxmT3hhTlRPY2hLWFdOU2E2VkphQVFBQUFBJCQAAAAAAAAAAAEAAAAtWblAterQobb-2K~YvAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJpcK1qaXCtad; STOKEN=1b9bcaaa2f589bf44c952a87ad3220565a86197c129ac859b9433729472e1205; SCRC=00ff4312bc9dc5eb81d78315ca1e0225; MCITY=-%3A; __cfduid=d57f7bb4dead8fce5a71718ff9050dec51514814269; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598; cflag=15%3A3; BDCLND=MOVLBixQAHxTGZOVIuVtIEowC2SBCIuk; PSINO=2; H_PS_PSSID=1436_21119_17001_20929; Hm_lvt_7a3960b6f067eb0085b7f96ff5e660b0=1515029538,1515029557,1515029563,1515029638; Hm_lpvt_7a3960b6f067eb0085b7f96ff5e660b0=1515029668; PANPSC=4638995888638665119%3AnSvEWpGhaFoeORq07AOFwen90oj%2BY%2FIsSK33LsWGbKHATV5Z7asqnkri4Mor44rD4z5GoXa%2Bqx7xTJ3v1z1m%2BltYlFVeDCX4XGY8gqYUtUX%2B1dbZdUK1tvkDvA%2Br0ePvLPY%2BF1C2z9ca2YA4NkcJCNnR6ytx85nJ%2B%2Bo8ht7g5D2LIWeznIUCtSkA0KYPulwlfkiVl%2Ff%2FRfx4kU4b9dv9by76Oxw8WnAw")
             ;
 
-    /*-----------成员变量------------------*/
-    //电影名称--》GN2312 --》URLEncode   使用在贴吧列表翻页时的参数
-    public static String moviesNameURLEncodeByGB2312;
-
     /*-----------错误提示--------------*/
     public static List<String> errPage = Arrays.asList( new String[]{"无法访问","删除","没找到文件","取消"});
     public static List<String> sucPage = Arrays.asList( new String[]{"mp4","rm","rmvb","wmv","avi","mkv"});
@@ -51,6 +57,9 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
     private Page page = null ;
 
     String PAN_BAIDU_COM = "://pan.baidu.com";
+
+    Integer count = 0;
+    String kw = "";
 
     public static void main(String[] args) {
         String s = "复仇者联盟";
@@ -72,13 +81,20 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                 .run();
     }
 
-
     public Site getSite() {
         return site;
     }
 
-
     public void process(Page page) {
+        if(page==null) return;
+
+        //链接中获取关键字
+        //框架提供的正则在处理(?<=wd=).*(?=&) 此类时指针越界
+        if(count==0){
+            getRegex(page.getUrl().get(),"(?<=wd=).*(?=&)");
+            count++;
+        }
+
         this.page = page;
         Html html = page.getHtml();
 
@@ -143,7 +159,8 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                 if(jsonObject.getInteger("isdir")==1){
                     if(page.getUrl().get().contains("list?uk=")){
                         String url = page.getUrl().regex("https.*dir=").get();
-                        page.addTargetRequest(url+jsonObject.getString("path"));
+                        addTargetRequest(url+jsonObject.getString("path"));
+
                     }
                 }else if (jsonObject.getInteger("isdir")==0){
                     YunBean bean = new YunBean();
@@ -171,16 +188,20 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
 
             //判断是否是进入百度云列表且为首次，yunData.FILEINFO（首次）
             if(regex.match() && page.getUrl().get().contains(PAN_BAIDU_COM)){
-                String fileInfo_s = html.regex("yunData.FILEINFO = .*?];").replace("yunData.FILEINFO =", "").replace(";", "").get().trim();
+//                String fileInfo_s = html.regex("yunData.FILEINFO = .*?];").replace("yunData.FILEINFO =", "").replace(";", "").get().trim();
+                String fileInfo_s = getRegex(html.get(),"(?<=yunData.FILEINFO = ).*(?=;)");
                 JSONArray fileInfo = JSONArray.parseArray(fileInfo_s);
-                String share_id  = html.regex("yunData.SHARE_ID .*?;").replace("yunData.SHARE_ID =", "").replace(";", "").replace("\"","").get().trim();
-                String uk_id  = html.regex("yunData.SHARE_UK .*?;").replace("yunData.SHARE_UK =", "").replace(";", "").replace("\"","").get().trim();
+//                String share_id  = html.regex("yunData.SHARE_ID .*?;").replace("yunData.SHARE_ID =", "").replace(";", "").replace("\"","").get().trim();
+                String share_id  = getRegex(html.get(),"(?<=yunData.SHARE_ID = \").*(?=\";)");
+//                String uk_id  = html.regex("yunData.SHARE_UK .*?;").replace("yunData.SHARE_UK =", "").replace(";", "").replace("\"","").get().trim();
+                String uk_id  = getRegex(html.get(),"(?<=yunData.SHARE_UK = \").*(?=\";)");
 
                 for (Object o : fileInfo) {
                     JSONObject jsonObject = JSONObject.parseObject(o.toString());
                     if(jsonObject.getInteger("isdir")==1){
                         String url = "https://pan.baidu.com/share/list?uk="+uk_id+"&shareid="+share_id+"&dir=";
-                        page.addTargetRequest(url+jsonObject.getString("path"));
+                        addTargetRequest(url+jsonObject.getString("path"));
+
                     }else if (jsonObject.getInteger("isdir")==0){
                         YunBean bean = new YunBean();
                         bean.setFileName(jsonObject.getString("server_filename"));
@@ -198,14 +219,15 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
             }else if(html.regex("yunData.setData.*?];").match()){   //直接播放
                 Selectable regex1 = html.regex("yunData.setData.*?\\);");
                 if (regex1 != null) {
-                    String setData_S = regex1.get().replace("yunData.setData(", "").replace(")","").replace(";","").trim();
+//                    String setData_S = regex1.get().replace("yunData.setData(", "").replace(")","").replace(";","").trim();
+                    String setData_S = getRegex(regex1.get(),"(?<=yunData.setData\\().*(?=\\);)");
                     JSONObject setData_json = JSONObject.parseObject(setData_S);
                     JSONArray file_list = setData_json.getJSONObject("file_list").getJSONArray("list");
 
                     YunBean bean = new YunBean();
                     for (Object o : file_list) {
                         JSONObject o1 = JSONObject.parseObject(o.toString());
-                        bean.setSize(getPrintSize(o1.getLong("size")));
+                        bean.setSize(o1.getString("size"));
                         bean.setFileName(o1.getString("server_filename"));
 
                     }
@@ -279,10 +301,15 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
             List<Selectable> nodes = html.xpath("//*[@id=\"content_left\"]/div").nodes();
             for (Selectable node : nodes) {
                 List<String> all = node.xpath("//*[@class=\"t\"]").links().regex("http://www.baidu.com/link?.*").all();
-                page.addTargetRequests(all);
+                for (String url : all) {
+                    addTargetRequest(url);
+                }
             }
         }else{
-            page.addTargetRequests(links.regex(".*://pan.baidu.com.*").all());
+            List<String> all = links.regex(".*://pan.baidu.com.*").all();
+            for (String url : all) {
+                addTargetRequest(url);
+            }
         }
     }
 
@@ -292,9 +319,28 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
         }
     }
 
+    //添加到pipline  同一入库
     public void insertDB(YunBean bean){
         page.putField("bean",bean);
     }
 
+    /**
+     * 添加到爬取队列
+     *
+     * 2018/1/9 update：增加增量爬取
+     *
+     * */
+    public void addTargetRequest(String url){
+        Jedis jedis = jedisPool.getResource();
+        Boolean incremental = jedis.sismember("incremental", "56");
+        page.addTargetRequest(url);
+    }
 
+    public String getRegex(String value , String pattern){
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(value);
+        while(m.find())
+            return m.group();
+        return null;
+    }
 }
