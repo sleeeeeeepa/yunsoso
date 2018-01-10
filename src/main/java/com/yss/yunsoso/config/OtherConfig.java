@@ -13,5 +13,7 @@ import java.util.List;
 public class OtherConfig {
     @Value("${phantomjsPath}")
     public String phantomjsPath;
+    @Value("${searchPage}")
+    public Integer searchPage;
 
 }

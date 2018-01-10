@@ -40,6 +40,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
 //    @Autowired
     private static RedisTemplate redisTemplate;
 
+    //添加count计数器  需要每个请求重置，spring注入对象暂无法实现 ， 此处手动实例化
     static {
         redisTemplate = (RedisTemplate) SpringUtil.getBean("redisTemplate");
         stringRedisTemplate = (StringRedisTemplate) SpringUtil.getBean("stringRedisTemplate");
@@ -219,12 +220,17 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
 
                     }else if (jsonObject.getInteger("isdir")==0){
                         YunBean bean = new YunBean();
-                        bean.setFileName(jsonObject.getString("server_filename"));
-                        //                    bean.setAuthor();
-                        bean.setSize(getPrintSize(jsonObject.getLong("size")));
+                        String server_filename = jsonObject.getString("server_filename");
+                        String size = getPrintSize(jsonObject.getLong("size"));
+                        bean.setFileName(server_filename);
+                        String format = server_filename.substring(server_filename.lastIndexOf("."), server_filename.length());
+                        String url = page.getUrl().get().replaceFirst("list", "link");
+
+                        bean.setFormat(format);
+                        bean.setSize(size);
                         bean.setKeyWord(kw);
-                        bean.setUrl(page.getUrl().get().replaceFirst("list","link"));
-                        System.out.println(bean);
+                        bean.setUrl(url);
+
                         insertDB(bean);
                         break;
                     }
@@ -243,11 +249,14 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                     YunBean bean = new YunBean();
                     for (Object o : file_list) {
                         JSONObject o1 = JSONObject.parseObject(o.toString());
-                        bean.setSize(o1.getString("size"));
-                        bean.setFileName(o1.getString("server_filename"));
+                        String size = o1.getString("size");
+                        bean.setSize(size);
+                        String server_filename = o1.getString("server_filename");
+                        bean.setFileName(server_filename);
                         bean.setKeyWord(kw);
                     }
-                    bean.setUrl(page.getUrl().get().replaceFirst("list","link"));
+                    String url = page.getUrl().get().replaceFirst("list", "link");
+                    bean.setUrl(url);
                     System.out.println(bean);
                     insertDB(bean);
                     return;

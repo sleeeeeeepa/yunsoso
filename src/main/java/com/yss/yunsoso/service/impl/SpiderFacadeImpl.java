@@ -35,7 +35,7 @@ public class SpiderFacadeImpl implements SpiderFacade {
             postfix = URLEncoder.encode(postfix, "gb2312");
             System.out.println(moviesName);
 
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < otherConfig.searchPage; i++) {
                 String url = ("https://www.baidu.com/s?wd="+moviesName+postfix+"&pn="+i+"0");
 //                String url = ("http://pan.baidu.com/s/1nva31mp");
                 Spider.create(new BaiduYunFindFileFromBaidu())

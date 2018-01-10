@@ -9,6 +9,7 @@ import us.codecraft.webmagic.pipeline.Pipeline;
 
 import javax.annotation.Resource;
 import java.util.Random;
+import java.util.UUID;
 
 @Component
 public class MysqlPipeline implements Pipeline {
@@ -20,7 +21,7 @@ public class MysqlPipeline implements Pipeline {
     public void process(ResultItems resultItems, Task task) {
         if (resultItems.get("bean") != null) {
             YunBean bean = (YunBean) resultItems.get("bean");
-            bean.setId(new Random().nextInt()+"");
+            bean.setId(UUID.randomUUID().toString());
             beanMapper.insert(bean);
         }
     }
