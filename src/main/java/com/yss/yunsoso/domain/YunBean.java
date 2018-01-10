@@ -19,6 +19,8 @@ public class YunBean {
 
     private Date failureDate;
 
+    private String keyWord;
+
     public String getId() {
         return id;
     }
@@ -81,5 +83,13 @@ public class YunBean {
 
     public void setFailureDate(Date failureDate) {
         this.failureDate = failureDate;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord == null ? null : keyWord.trim();
     }
 }

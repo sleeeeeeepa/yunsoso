@@ -23,8 +23,8 @@ public class SpiderFacadeImpl implements SpiderFacade {
     private OtherConfig otherConfig;
     @Resource
     private MysqlPipeline mysqlPipeline;
-    @Resource
-    private BaiduYunFindFileFromBaidu baiduYunFindFileFromBaidu;
+//    @Resource
+//    private BaiduYunFindFileFromBaidu baiduYunFindFileFromBaidu;
 
     @Override
     public boolean getSpider(String keyword) {
@@ -38,7 +38,7 @@ public class SpiderFacadeImpl implements SpiderFacade {
             for (int i = 0; i < 50; i++) {
                 String url = ("https://www.baidu.com/s?wd="+moviesName+postfix+"&pn="+i+"0");
 //                String url = ("http://pan.baidu.com/s/1nva31mp");
-                Spider.create(baiduYunFindFileFromBaidu)
+                Spider.create(new BaiduYunFindFileFromBaidu())
                         .addUrl(url)
                         .setDownloader(new PhantomJSDownloader(otherConfig.phantomjsPath))
                         .thread(1)

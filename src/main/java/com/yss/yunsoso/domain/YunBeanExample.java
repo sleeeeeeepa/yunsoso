@@ -644,6 +644,76 @@ public class YunBeanExample {
             addCriterion("failure_date not between", value1, value2, "failureDate");
             return (Criteria) this;
         }
+
+        public Criteria andKeyWordIsNull() {
+            addCriterion("key_word is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordIsNotNull() {
+            addCriterion("key_word is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordEqualTo(String value) {
+            addCriterion("key_word =", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordNotEqualTo(String value) {
+            addCriterion("key_word <>", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordGreaterThan(String value) {
+            addCriterion("key_word >", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordGreaterThanOrEqualTo(String value) {
+            addCriterion("key_word >=", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordLessThan(String value) {
+            addCriterion("key_word <", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordLessThanOrEqualTo(String value) {
+            addCriterion("key_word <=", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordLike(String value) {
+            addCriterion("key_word like", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordNotLike(String value) {
+            addCriterion("key_word not like", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordIn(List<String> values) {
+            addCriterion("key_word in", values, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordNotIn(List<String> values) {
+            addCriterion("key_word not in", values, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordBetween(String value1, String value2) {
+            addCriterion("key_word between", value1, value2, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordNotBetween(String value1, String value2) {
+            addCriterion("key_word not between", value1, value2, "keyWord");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

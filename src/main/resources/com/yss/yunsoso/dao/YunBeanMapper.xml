@@ -10,6 +10,7 @@
     <result column="author" property="author" jdbcType="VARCHAR" />
     <result column="upload_date" property="uploadDate" jdbcType="TIMESTAMP" />
     <result column="failure_date" property="failureDate" jdbcType="TIMESTAMP" />
+    <result column="key_word" property="keyWord" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, file_name, url, format, size, author, upload_date, failure_date
+    id, file_name, url, format, size, author, upload_date, failure_date, key_word
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yss.yunsoso.domain.YunBeanExample" >
     select
@@ -105,10 +106,12 @@
   <insert id="insert" parameterType="com.yss.yunsoso.domain.YunBean" >
     insert into yun_bean (id, file_name, url, 
       format, size, author, 
-      upload_date, failure_date)
+      upload_date, failure_date, key_word
+      )
     values (#{id,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
       #{format,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
-      #{uploadDate,jdbcType=TIMESTAMP}, #{failureDate,jdbcType=TIMESTAMP})
+      #{uploadDate,jdbcType=TIMESTAMP}, #{failureDate,jdbcType=TIMESTAMP}, #{keyWord,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.yss.yunsoso.domain.YunBean" >
     insert into yun_bean
@@ -137,6 +140,9 @@
       <if test="failureDate != null" >
         failure_date,
       </if>
+      <if test="keyWord != null" >
+        key_word,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -162,6 +168,9 @@
       </if>
       <if test="failureDate != null" >
         #{failureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="keyWord != null" >
+        #{keyWord,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -198,6 +207,9 @@
       <if test="record.failureDate != null" >
         failure_date = #{record.failureDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.keyWord != null" >
+        key_word = #{record.keyWord,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -212,7 +224,8 @@
       size = #{record.size,jdbcType=VARCHAR},
       author = #{record.author,jdbcType=VARCHAR},
       upload_date = #{record.uploadDate,jdbcType=TIMESTAMP},
-      failure_date = #{record.failureDate,jdbcType=TIMESTAMP}
+      failure_date = #{record.failureDate,jdbcType=TIMESTAMP},
+      key_word = #{record.keyWord,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -241,6 +254,9 @@
       <if test="failureDate != null" >
         failure_date = #{failureDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="keyWord != null" >
+        key_word = #{keyWord,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -252,7 +268,8 @@
       size = #{size,jdbcType=VARCHAR},
       author = #{author,jdbcType=VARCHAR},
       upload_date = #{uploadDate,jdbcType=TIMESTAMP},
-      failure_date = #{failureDate,jdbcType=TIMESTAMP}
+      failure_date = #{failureDate,jdbcType=TIMESTAMP},
+      key_word = #{keyWord,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

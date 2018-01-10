@@ -2,15 +2,14 @@ package com.yss.yunsoso.controller;
 
 import com.yss.yunsoso.dao.YunBeanMapper;
 import com.yss.yunsoso.service.SpiderFacade;
-import com.yss.yunsoso.utils.RedisClient;
-import org.apache.log4j.spi.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import javax.annotation.Resource;
 
@@ -22,11 +21,10 @@ import javax.annotation.Resource;
 public class UserController {
     @Resource
     SpiderFacade spderfaFacadeService;
-    @Resource
-    RedisClient redisClient;
-    @Resource
-    JedisPool jedisPool;
-
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private RedisTemplate redisTemplate;
     @Resource
     private YunBeanMapper beanMapper;
 
@@ -46,10 +44,10 @@ public class UserController {
     @RequestMapping(value = "/redis_test")
     @ResponseBody
     public String redis_test() throws Exception {
-        Jedis jedis = jedisPool.getResource();
-        jedis.sadd("incremental","659826","365841");
-        jedis.sadd("incremental","789654","3215674");
-        Boolean incremental = jedis.sismember("incremental", "56");
+        SetOperations setOperations = redisTemplate.opsForSet();//操作set
+        Long add = setOperations.add("shuibei","xxs");
+        System.out.println(setOperations.isMember("shuibei", "xxs"));
+        System.out.println(setOperations.isMember("shuibei", "xxs2"));
         return "";
     }
 }

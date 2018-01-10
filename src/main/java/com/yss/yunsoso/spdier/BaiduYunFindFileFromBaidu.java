@@ -4,13 +4,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.yss.yunsoso.domain.YunBean;
-import org.apache.http.protocol.HTTP;
+import com.yss.yunsoso.utils.SpringUtil;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -19,22 +21,29 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 
-import javax.annotation.Resource;
-import javax.swing.*;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-@Component
-//@Scope("prototype")
+//@Component
 public class BaiduYunFindFileFromBaidu implements PageProcessor {
 
-    @Autowired
-    private JedisPool jedisPool;
+//    @Autowired
+    private static StringRedisTemplate stringRedisTemplate;
+
+//    @Autowired
+    private static RedisTemplate redisTemplate;
+
+    static {
+        redisTemplate = (RedisTemplate) SpringUtil.getBean("redisTemplate");
+        stringRedisTemplate = (StringRedisTemplate) SpringUtil.getBean("stringRedisTemplate");
+    }
 
     private Site site = Site.me()
             .setDomain("pan.baidu.com/")
@@ -91,7 +100,12 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
         //链接中获取关键字
         //框架提供的正则在处理(?<=wd=).*(?=&) 此类时指针越界
         if(count==0){
-            getRegex(page.getUrl().get(),"(?<=wd=).*(?=&)");
+            try {
+                String kw_gb2312 = URLDecoder.decode(getRegex(page.getUrl().get(), "(?<=wd=).*(?=&)"), "gb2312");
+                kw = kw_gb2312.split(" ")[0].replace("\"","");  //提取关键字
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             count++;
         }
 
@@ -168,6 +182,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
 //                    bean.setAuthor();
                     bean.setSize(getPrintSize(jsonObject.getLong("size")));
                     bean.setUrl(page.getUrl().get().replaceFirst("list","link"));
+                    bean.setKeyWord(kw);
                     System.out.println(bean);
                     insertDB(bean);
                 }
@@ -207,6 +222,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                         bean.setFileName(jsonObject.getString("server_filename"));
                         //                    bean.setAuthor();
                         bean.setSize(getPrintSize(jsonObject.getLong("size")));
+                        bean.setKeyWord(kw);
                         bean.setUrl(page.getUrl().get().replaceFirst("list","link"));
                         System.out.println(bean);
                         insertDB(bean);
@@ -229,7 +245,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                         JSONObject o1 = JSONObject.parseObject(o.toString());
                         bean.setSize(o1.getString("size"));
                         bean.setFileName(o1.getString("server_filename"));
-
+                        bean.setKeyWord(kw);
                     }
                     bean.setUrl(page.getUrl().get().replaceFirst("list","link"));
                     System.out.println(bean);
@@ -331,9 +347,14 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
      *
      * */
     public void addTargetRequest(String url){
-        Jedis jedis = jedisPool.getResource();
-        Boolean incremental = jedis.sismember("incremental", "56");
-        page.addTargetRequest(url);
+        SetOperations setOperations = redisTemplate.opsForSet();//操作set
+        Boolean isExist = setOperations.isMember(kw, url);
+        if(isExist){   //存在该url 跳过不添加
+            return;
+        }else{
+            Long add = setOperations.add(kw,url);
+            page.addTargetRequest(url);
+        }
     }
 
     public String getRegex(String value , String pattern){
