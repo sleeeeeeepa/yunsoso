@@ -1,24 +1,35 @@
 package com.yss.yunsoso.domain;
 
+import org.apache.solr.client.solrj.beans.Field;
+
 import java.util.Date;
 
 public class YunBean {
+    @Field("id")
     private String id;
 
+    @Field("yun_fileName")
     private String fileName;
 
+    @Field("yun_url")
     private String url;
 
+    @Field("yun_format")
     private String format;
 
+    @Field("yun_size")
     private String size;
 
+    @Field("yun_author")
     private String author;
 
+    @Field("yun_uploadDate")
     private Date uploadDate;
 
+    @Field("yun_failureDate")
     private Date failureDate;
 
+    @Field("yun_keyWord")
     private String keyWord;
 
     public String getId() {

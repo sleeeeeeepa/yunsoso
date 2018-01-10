@@ -37,7 +37,7 @@ public class SpiderFacadeImpl implements SpiderFacade {
 
             for (int i = 0; i < otherConfig.searchPage; i++) {
                 String url = ("https://www.baidu.com/s?wd="+moviesName+postfix+"&pn="+i+"0");
-//                String url = ("http://pan.baidu.com/s/1nva31mp");
+//                String url = ("http://pan.baidu.com/share/link?shareid=839721397&uk=1997370217");
                 Spider.create(new BaiduYunFindFileFromBaidu())
                         .addUrl(url)
                         .setDownloader(new PhantomJSDownloader(otherConfig.phantomjsPath))
