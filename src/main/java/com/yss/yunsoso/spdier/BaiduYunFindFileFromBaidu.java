@@ -179,10 +179,15 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                     }
                 }else if (jsonObject.getInteger("isdir")==0){
                     YunBean bean = new YunBean();
-                    bean.setFileName(jsonObject.getString("server_filename"));
-//                    bean.setAuthor();
-                    bean.setSize(getPrintSize(jsonObject.getLong("size")));
-                    bean.setUrl(page.getUrl().get().replaceFirst("list","link"));
+                    String server_filename = jsonObject.getString("server_filename");
+                    String format = server_filename.substring(server_filename.lastIndexOf("."), server_filename.length());
+                    String size = jsonObject.getString("size");
+                    String url = page.getUrl().get().replaceFirst("list", "link");
+
+                    bean.setFileName(server_filename);
+                    bean.setSize(size);
+                    bean.setUrl(url);
+                    bean.setFormat(format);
                     bean.setKeyWord(kw);
                     System.out.println(bean);
                     insertDB(bean);
@@ -200,7 +205,6 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
     public void  firstYunList(Html html){
         try {
             Selectable regex = html.regex("yunData.FILEINFO = .*?];");
-
 
             //判断是否是进入百度云列表且为首次，yunData.FILEINFO（首次）
             if(regex.match() && page.getUrl().get().contains(PAN_BAIDU_COM)){
@@ -221,7 +225,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                     }else if (jsonObject.getInteger("isdir")==0){
                         YunBean bean = new YunBean();
                         String server_filename = jsonObject.getString("server_filename");
-                        String size = getPrintSize(jsonObject.getLong("size"));
+                        String size = jsonObject.getString("size");
                         bean.setFileName(server_filename);
                         String format = server_filename.substring(server_filename.lastIndexOf("."), server_filename.length());
                         String url = page.getUrl().get().replaceFirst("list", "link");
@@ -252,8 +256,10 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                         String size = o1.getString("size");
                         bean.setSize(size);
                         String server_filename = o1.getString("server_filename");
+                        String format = server_filename.substring(server_filename.lastIndexOf("."), server_filename.length());
                         bean.setFileName(server_filename);
                         bean.setKeyWord(kw);
+                        bean.setFormat(format);
                     }
                     String url = page.getUrl().get().replaceFirst("list", "link");
                     bean.setUrl(url);
@@ -284,36 +290,6 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static String getPrintSize(long size) {
-
-        //如果字节数少于1024，则直接以B为单位，否则先除于1024，后3位因太少无意义
-        if (size < 1024) {
-            return String.valueOf(size) + "B";
-        } else {
-            size = size / 1024;
-        }
-        //如果原字节数除于1024之后，少于1024，则可以直接以KB作为单位
-        //因为还没有到达要使用另一个单位的时候
-        //接下去以此类推
-        if (size < 1024) {
-            return String.valueOf(size) + "KB";
-        } else {
-            size = size / 1024;
-        }
-        if (size < 1024) {
-            //因为如果以MB为单位的话，要保留最后1位小数，
-            //因此，把此数乘以100之后再取余
-            size = size * 100;
-            return String.valueOf((size / 100)) + "."
-                    + String.valueOf((size % 100)) + "MB";
-        } else {
-            //否则如果要以GB为单位的，先除于1024再作同样的处理
-            size = size * 100 / 1024;
-            return String.valueOf((size / 100)) + "."
-                    + String.valueOf((size % 100)) + "GB";
-        }
     }
 
     //非百度云页面 ， 方法目标爬取其中百度云链接

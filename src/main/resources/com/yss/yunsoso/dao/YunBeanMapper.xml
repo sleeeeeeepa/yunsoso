@@ -7,10 +7,13 @@
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="format" property="format" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="VARCHAR" />
+    <result column="size_format" property="sizeFormat" jdbcType="VARCHAR" />
     <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="key_word" property="keyWord" jdbcType="VARCHAR" />
     <result column="upload_date" property="uploadDate" jdbcType="TIMESTAMP" />
     <result column="failure_date" property="failureDate" jdbcType="TIMESTAMP" />
-    <result column="key_word" property="keyWord" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="recycle" property="recycle" jdbcType="CHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,7 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, file_name, url, format, size, author, upload_date, failure_date, key_word
+    id, file_name, url, format, size, size_format, author, key_word, upload_date, failure_date, 
+    create_date, recycle
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yss.yunsoso.domain.YunBeanExample" >
     select
@@ -105,12 +109,14 @@
   </delete>
   <insert id="insert" parameterType="com.yss.yunsoso.domain.YunBean" >
     insert into yun_bean (id, file_name, url, 
-      format, size, author, 
-      upload_date, failure_date, key_word
+      format, size, size_format, 
+      author, key_word, upload_date, 
+      failure_date, create_date, recycle
       )
     values (#{id,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
-      #{format,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
-      #{uploadDate,jdbcType=TIMESTAMP}, #{failureDate,jdbcType=TIMESTAMP}, #{keyWord,jdbcType=VARCHAR}
+      #{format,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR}, #{sizeFormat,jdbcType=VARCHAR}, 
+      #{author,jdbcType=VARCHAR}, #{keyWord,jdbcType=VARCHAR}, #{uploadDate,jdbcType=TIMESTAMP}, 
+      #{failureDate,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, #{recycle,jdbcType=CHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.yss.yunsoso.domain.YunBean" >
@@ -131,8 +137,14 @@
       <if test="size != null" >
         size,
       </if>
+      <if test="sizeFormat != null" >
+        size_format,
+      </if>
       <if test="author != null" >
         author,
+      </if>
+      <if test="keyWord != null" >
+        key_word,
       </if>
       <if test="uploadDate != null" >
         upload_date,
@@ -140,8 +152,11 @@
       <if test="failureDate != null" >
         failure_date,
       </if>
-      <if test="keyWord != null" >
-        key_word,
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="recycle != null" >
+        recycle,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -160,8 +175,14 @@
       <if test="size != null" >
         #{size,jdbcType=VARCHAR},
       </if>
+      <if test="sizeFormat != null" >
+        #{sizeFormat,jdbcType=VARCHAR},
+      </if>
       <if test="author != null" >
         #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="keyWord != null" >
+        #{keyWord,jdbcType=VARCHAR},
       </if>
       <if test="uploadDate != null" >
         #{uploadDate,jdbcType=TIMESTAMP},
@@ -169,8 +190,11 @@
       <if test="failureDate != null" >
         #{failureDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="keyWord != null" >
-        #{keyWord,jdbcType=VARCHAR},
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recycle != null" >
+        #{recycle,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -198,8 +222,14 @@
       <if test="record.size != null" >
         size = #{record.size,jdbcType=VARCHAR},
       </if>
+      <if test="record.sizeFormat != null" >
+        size_format = #{record.sizeFormat,jdbcType=VARCHAR},
+      </if>
       <if test="record.author != null" >
         author = #{record.author,jdbcType=VARCHAR},
+      </if>
+      <if test="record.keyWord != null" >
+        key_word = #{record.keyWord,jdbcType=VARCHAR},
       </if>
       <if test="record.uploadDate != null" >
         upload_date = #{record.uploadDate,jdbcType=TIMESTAMP},
@@ -207,8 +237,11 @@
       <if test="record.failureDate != null" >
         failure_date = #{record.failureDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.keyWord != null" >
-        key_word = #{record.keyWord,jdbcType=VARCHAR},
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.recycle != null" >
+        recycle = #{record.recycle,jdbcType=CHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -222,10 +255,13 @@
       url = #{record.url,jdbcType=VARCHAR},
       format = #{record.format,jdbcType=VARCHAR},
       size = #{record.size,jdbcType=VARCHAR},
+      size_format = #{record.sizeFormat,jdbcType=VARCHAR},
       author = #{record.author,jdbcType=VARCHAR},
+      key_word = #{record.keyWord,jdbcType=VARCHAR},
       upload_date = #{record.uploadDate,jdbcType=TIMESTAMP},
       failure_date = #{record.failureDate,jdbcType=TIMESTAMP},
-      key_word = #{record.keyWord,jdbcType=VARCHAR}
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      recycle = #{record.recycle,jdbcType=CHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -245,8 +281,14 @@
       <if test="size != null" >
         size = #{size,jdbcType=VARCHAR},
       </if>
+      <if test="sizeFormat != null" >
+        size_format = #{sizeFormat,jdbcType=VARCHAR},
+      </if>
       <if test="author != null" >
         author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="keyWord != null" >
+        key_word = #{keyWord,jdbcType=VARCHAR},
       </if>
       <if test="uploadDate != null" >
         upload_date = #{uploadDate,jdbcType=TIMESTAMP},
@@ -254,8 +296,11 @@
       <if test="failureDate != null" >
         failure_date = #{failureDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="keyWord != null" >
-        key_word = #{keyWord,jdbcType=VARCHAR},
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recycle != null" >
+        recycle = #{recycle,jdbcType=CHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -266,10 +311,13 @@
       url = #{url,jdbcType=VARCHAR},
       format = #{format,jdbcType=VARCHAR},
       size = #{size,jdbcType=VARCHAR},
+      size_format = #{sizeFormat,jdbcType=VARCHAR},
       author = #{author,jdbcType=VARCHAR},
+      key_word = #{keyWord,jdbcType=VARCHAR},
       upload_date = #{uploadDate,jdbcType=TIMESTAMP},
       failure_date = #{failureDate,jdbcType=TIMESTAMP},
-      key_word = #{keyWord,jdbcType=VARCHAR}
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      recycle = #{recycle,jdbcType=CHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

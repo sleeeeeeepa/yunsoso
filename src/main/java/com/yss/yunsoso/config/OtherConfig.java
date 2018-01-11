@@ -15,5 +15,7 @@ public class OtherConfig {
     public String phantomjsPath;
     @Value("${searchPage}")
     public Integer searchPage;
+    @Value("${pageSize}")
+    public Integer pageSize;
 
 }

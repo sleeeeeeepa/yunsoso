@@ -455,6 +455,76 @@ public class YunBeanExample {
             return (Criteria) this;
         }
 
+        public Criteria andSizeFormatIsNull() {
+            addCriterion("size_format is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatIsNotNull() {
+            addCriterion("size_format is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatEqualTo(String value) {
+            addCriterion("size_format =", value, "sizeFormat");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatNotEqualTo(String value) {
+            addCriterion("size_format <>", value, "sizeFormat");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatGreaterThan(String value) {
+            addCriterion("size_format >", value, "sizeFormat");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatGreaterThanOrEqualTo(String value) {
+            addCriterion("size_format >=", value, "sizeFormat");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatLessThan(String value) {
+            addCriterion("size_format <", value, "sizeFormat");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatLessThanOrEqualTo(String value) {
+            addCriterion("size_format <=", value, "sizeFormat");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatLike(String value) {
+            addCriterion("size_format like", value, "sizeFormat");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatNotLike(String value) {
+            addCriterion("size_format not like", value, "sizeFormat");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatIn(List<String> values) {
+            addCriterion("size_format in", values, "sizeFormat");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatNotIn(List<String> values) {
+            addCriterion("size_format not in", values, "sizeFormat");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatBetween(String value1, String value2) {
+            addCriterion("size_format between", value1, value2, "sizeFormat");
+            return (Criteria) this;
+        }
+
+        public Criteria andSizeFormatNotBetween(String value1, String value2) {
+            addCriterion("size_format not between", value1, value2, "sizeFormat");
+            return (Criteria) this;
+        }
+
         public Criteria andAuthorIsNull() {
             addCriterion("author is null");
             return (Criteria) this;
@@ -522,6 +592,76 @@ public class YunBeanExample {
 
         public Criteria andAuthorNotBetween(String value1, String value2) {
             addCriterion("author not between", value1, value2, "author");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordIsNull() {
+            addCriterion("key_word is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordIsNotNull() {
+            addCriterion("key_word is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordEqualTo(String value) {
+            addCriterion("key_word =", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordNotEqualTo(String value) {
+            addCriterion("key_word <>", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordGreaterThan(String value) {
+            addCriterion("key_word >", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordGreaterThanOrEqualTo(String value) {
+            addCriterion("key_word >=", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordLessThan(String value) {
+            addCriterion("key_word <", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordLessThanOrEqualTo(String value) {
+            addCriterion("key_word <=", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordLike(String value) {
+            addCriterion("key_word like", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordNotLike(String value) {
+            addCriterion("key_word not like", value, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordIn(List<String> values) {
+            addCriterion("key_word in", values, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordNotIn(List<String> values) {
+            addCriterion("key_word not in", values, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordBetween(String value1, String value2) {
+            addCriterion("key_word between", value1, value2, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeyWordNotBetween(String value1, String value2) {
+            addCriterion("key_word not between", value1, value2, "keyWord");
             return (Criteria) this;
         }
 
@@ -645,73 +785,133 @@ public class YunBeanExample {
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordIsNull() {
-            addCriterion("key_word is null");
+        public Criteria andCreateDateIsNull() {
+            addCriterion("create_date is null");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordIsNotNull() {
-            addCriterion("key_word is not null");
+        public Criteria andCreateDateIsNotNull() {
+            addCriterion("create_date is not null");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordEqualTo(String value) {
-            addCriterion("key_word =", value, "keyWord");
+        public Criteria andCreateDateEqualTo(Date value) {
+            addCriterion("create_date =", value, "createDate");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordNotEqualTo(String value) {
-            addCriterion("key_word <>", value, "keyWord");
+        public Criteria andCreateDateNotEqualTo(Date value) {
+            addCriterion("create_date <>", value, "createDate");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordGreaterThan(String value) {
-            addCriterion("key_word >", value, "keyWord");
+        public Criteria andCreateDateGreaterThan(Date value) {
+            addCriterion("create_date >", value, "createDate");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordGreaterThanOrEqualTo(String value) {
-            addCriterion("key_word >=", value, "keyWord");
+        public Criteria andCreateDateGreaterThanOrEqualTo(Date value) {
+            addCriterion("create_date >=", value, "createDate");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordLessThan(String value) {
-            addCriterion("key_word <", value, "keyWord");
+        public Criteria andCreateDateLessThan(Date value) {
+            addCriterion("create_date <", value, "createDate");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordLessThanOrEqualTo(String value) {
-            addCriterion("key_word <=", value, "keyWord");
+        public Criteria andCreateDateLessThanOrEqualTo(Date value) {
+            addCriterion("create_date <=", value, "createDate");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordLike(String value) {
-            addCriterion("key_word like", value, "keyWord");
+        public Criteria andCreateDateIn(List<Date> values) {
+            addCriterion("create_date in", values, "createDate");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordNotLike(String value) {
-            addCriterion("key_word not like", value, "keyWord");
+        public Criteria andCreateDateNotIn(List<Date> values) {
+            addCriterion("create_date not in", values, "createDate");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordIn(List<String> values) {
-            addCriterion("key_word in", values, "keyWord");
+        public Criteria andCreateDateBetween(Date value1, Date value2) {
+            addCriterion("create_date between", value1, value2, "createDate");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordNotIn(List<String> values) {
-            addCriterion("key_word not in", values, "keyWord");
+        public Criteria andCreateDateNotBetween(Date value1, Date value2) {
+            addCriterion("create_date not between", value1, value2, "createDate");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordBetween(String value1, String value2) {
-            addCriterion("key_word between", value1, value2, "keyWord");
+        public Criteria andRecycleIsNull() {
+            addCriterion("recycle is null");
             return (Criteria) this;
         }
 
-        public Criteria andKeyWordNotBetween(String value1, String value2) {
-            addCriterion("key_word not between", value1, value2, "keyWord");
+        public Criteria andRecycleIsNotNull() {
+            addCriterion("recycle is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleEqualTo(String value) {
+            addCriterion("recycle =", value, "recycle");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleNotEqualTo(String value) {
+            addCriterion("recycle <>", value, "recycle");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleGreaterThan(String value) {
+            addCriterion("recycle >", value, "recycle");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleGreaterThanOrEqualTo(String value) {
+            addCriterion("recycle >=", value, "recycle");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleLessThan(String value) {
+            addCriterion("recycle <", value, "recycle");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleLessThanOrEqualTo(String value) {
+            addCriterion("recycle <=", value, "recycle");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleLike(String value) {
+            addCriterion("recycle like", value, "recycle");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleNotLike(String value) {
+            addCriterion("recycle not like", value, "recycle");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleIn(List<String> values) {
+            addCriterion("recycle in", values, "recycle");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleNotIn(List<String> values) {
+            addCriterion("recycle not in", values, "recycle");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleBetween(String value1, String value2) {
+            addCriterion("recycle between", value1, value2, "recycle");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecycleNotBetween(String value1, String value2) {
+            addCriterion("recycle not between", value1, value2, "recycle");
             return (Criteria) this;
         }
     }

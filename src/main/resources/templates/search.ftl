@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>云搜搜</title>
 
-<link rel="stylesheet" type="text/css" href="../static/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/default.css" />
 
 <!--必要样式-->
-<link rel="stylesheet" type="text/css" href="../static/css/search-form.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/search-form.css" />
 
 </head>
 <body>
-
+<#--  搜索主体 -->
 <form onSubmit="submitFn(this, event);" action="" id="search">
 	<div class="search-wrapper">
 		<div class="input-holder">
@@ -27,7 +27,9 @@
 	</div>
 </form>
 
-<script src="../static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+<#-- 遮罩 -->
+
+<script src="/static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 function searchToggle(obj, evt){
 	var container = $(obj).closest('.search-wrapper');
@@ -53,7 +55,7 @@ function submitFn(obj, evt){
 		_html = "关键词不能为空。";
 	} else{
 		_html += "<b>" + value + "</b>";
-        document.getElementById('search').action = "/find/"+value;
+        document.getElementById('search').action = "/find/"+value+"/0";
         return true;
 	}
 
