@@ -20,6 +20,9 @@
 			<input type="text" class="search-input" placeholder="请输入关键词" id="kw"/>
 			<button class="search-icon" onClick="searchToggle(this, event);"><span></span></button>
 		</div>
+		<button onClick="findAll();" style="background: #fff;color: #000;height: 30px;line-height: 27px;width: 130px;border-radius: 10px;text-align: center;margin: 0 auto;margin-top: 5px;">
+			看看有什么
+		</button>
 		<span class="close" onClick="searchToggle(this, event);"></span>
 		<div class="result-container">
 
@@ -27,7 +30,6 @@
 	</div>
 </form>
 
-<#-- 遮罩 -->
 
 <script src="/static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -63,6 +65,10 @@ function submitFn(obj, evt){
 	$(obj).find('.result-container').fadeIn(100);
 
 	evt.preventDefault();
+}
+
+function findAll() {
+    window.location.href="/findAll/0";
 }
 </script>
 

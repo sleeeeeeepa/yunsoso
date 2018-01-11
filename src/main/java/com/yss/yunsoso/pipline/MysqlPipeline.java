@@ -1,5 +1,6 @@
 package com.yss.yunsoso.pipline;
 
+import com.yss.yunsoso.config.OtherConfig;
 import com.yss.yunsoso.dao.YunBeanMapper;
 import com.yss.yunsoso.domain.YunBean;
 import org.apache.solr.client.solrj.SolrClient;
@@ -15,6 +16,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class MysqlPipeline implements Pipeline {
@@ -23,17 +26,31 @@ public class MysqlPipeline implements Pipeline {
     private YunBeanMapper beanMapper;
     @Autowired
     private SolrClient client;
+    @Resource
+    private OtherConfig otherConfig;
 
     @Override
     public void process(ResultItems resultItems, Task task) {
         if (resultItems.get("bean") != null) {
             YunBean bean = (YunBean) resultItems.get("bean");
+            String format = bean.getFormat();
+
+            if(isExist(format))return;  //如果是图片格式不保存
+
             bean.setSizeFormat(getPrintSize(Long.parseLong(bean.getSize())));
             bean.setCreateDate(new Date());
             bean.setRecycle("0");
             toDB(bean);
             toSolr(bean);
         }
+    }
+
+    private boolean isExist(String format) {
+        Pattern p = Pattern.compile(format);
+        Matcher m = p.matcher(otherConfig.pictureFormat);
+        while(m.find())
+            return false;
+        return true;
     }
 
     private void toSolr(YunBean bean) {

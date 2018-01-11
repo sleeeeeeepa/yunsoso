@@ -193,4 +193,14 @@ body {padding: 0px; margin:0px; background:url(../img/image.jpg) ; background-po
 
 @media screen and (max-width: 560px) {
     .search-wrapper.active .input-holder {width:200px;}
+
+}
+
+.a{
+    height: 30px;
+    width: 70px;
+    line-height: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+
 }

@@ -1,6 +1,7 @@
 package com.yss.yunsoso.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.yss.yunsoso.config.OtherConfig;
 import com.yss.yunsoso.dao.YunBeanMapper;
 import com.yss.yunsoso.service.SolrFacade;
@@ -43,20 +44,32 @@ public class UserController {
     @Resource
     private YunBeanMapper beanMapper;
 
-    @Autowired
-    private SolrClient client;
-
-
     @RequestMapping(value = "/find/{kw}/{index}")
-    public String cs(@PathVariable String kw , @PathVariable Integer index , ModelMap map) {
+    public String find(@PathVariable String kw , @PathVariable Integer index , ModelMap map) {
 
         String results = solrFacade.getResults(kw, index, otherConfig.pageSize);
         if(results!=null){
-            map.put("results",JSONArray.parseArray(results));
+            JSONObject responseObject = JSONObject.parseObject(results);
+            map.put("currentPage", responseObject.get("currPage"));
+            map.put("totalItem", responseObject.get("total"));
+            map.put("results", responseObject.getJSONArray("results"));
+            map.put("kw", kw);
         }else
             spderfaFacade.getSpider(kw);
 
-        //调用爬虫
+        return "/list";
+    }
+
+    @RequestMapping(value = "/findAll/{index}")
+    public String findAll(ModelMap map,@PathVariable Integer index) {
+
+        String results = solrFacade.getResults(index, otherConfig.pageSize);
+        JSONObject responseObject = JSONObject.parseObject(results);
+        map.put("currentPage", responseObject.get("currPage"));
+        map.put("totalItem", responseObject.get("total"));
+        map.put("results", responseObject.getJSONArray("results"));
+
+
         return "/list";
     }
 

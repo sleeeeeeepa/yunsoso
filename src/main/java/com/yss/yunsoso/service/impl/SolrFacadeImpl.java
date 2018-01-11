@@ -1,6 +1,7 @@
 package com.yss.yunsoso.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.yss.yunsoso.service.SolrFacade;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -32,10 +33,42 @@ public class SolrFacadeImpl implements SolrFacade {
         try {
             response = client.query(solrQuery, SolrRequest.METHOD.POST);
             SolrDocumentList results = response.getResults();
-
             if(results==null || results.size()==0){ return null;}
 
-            return JSONArray.toJSONString(results);
+            JSONObject object = new JSONObject();
+            object.put("results",JSONArray.toJSONString(results));
+            object.put("total",results.getNumFound());
+            object.put("currPage",index/20);
+
+            return JSONObject.toJSONString(object);
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public String getResults(Integer index,Integer pageSize) {
+        SolrQuery solrQuery = new SolrQuery();
+        solrQuery.setQuery("*:*");
+        solrQuery.setStart(index);
+        solrQuery.setRows(pageSize);
+//        solrQuery.setHighlightSnippets(2);// 结果分片数，默认为1
+//        solrQuery.setHighlightFragsize(1000);// 每个分片的最大长度，默认为100
+        QueryResponse response;
+        try {
+            response = client.query(solrQuery, SolrRequest.METHOD.POST);
+            SolrDocumentList results = response.getResults();
+
+            if(results==null || results.size()==0){ return null;}
+            JSONObject object = new JSONObject();
+            object.put("results",JSONArray.toJSONString(results));
+            object.put("total",results.getNumFound());
+            object.put("kw",results.getNumFound());
+            object.put("currPage",index/20);
+            return JSONObject.toJSONString(object);
         } catch (SolrServerException e) {
             e.printStackTrace();
         } catch (IOException e) {
