@@ -92,7 +92,7 @@
             if(page_index!=currpage){
 //                window.location.href="/findAll/"+page_index*20;
                 var kw = $("#kw").val();
-                if(kw==""){
+                if(kw==undefined){
                     window.location.href="/findAll/"+page_index*20;
                 }else {
                     document.getElementById('result_list').action = "/find/"+kw+"/"+page_index*20;
