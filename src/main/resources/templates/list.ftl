@@ -91,7 +91,7 @@
         function pageselectCallback(page_index, jq){
             if(page_index!=currpage){
 //                window.location.href="/findAll/"+page_index*20;
-                var kw = "${kw}";
+                var kw = $("#kw").val();
                 if(kw==""){
                     window.location.href="/findAll/"+page_index*20;
                 }else {
