@@ -1,7 +1,9 @@
 package com.yss.yunsoso.pipline;
 
 import com.yss.yunsoso.config.OtherConfig;
+import com.yss.yunsoso.dao.ErrBeanMapper;
 import com.yss.yunsoso.dao.YunBeanMapper;
+import com.yss.yunsoso.domain.ErrBean;
 import com.yss.yunsoso.domain.YunBean;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -14,7 +16,6 @@ import us.codecraft.webmagic.pipeline.Pipeline;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Random;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +25,8 @@ public class MysqlPipeline implements Pipeline {
 
     @Resource
     private YunBeanMapper beanMapper;
+    @Resource
+    private ErrBeanMapper errBeanMapper;
     @Autowired
     private SolrClient client;
     @Resource
@@ -40,8 +43,14 @@ public class MysqlPipeline implements Pipeline {
             bean.setSizeFormat(getPrintSize(Long.parseLong(bean.getSize())));
             bean.setCreateDate(new Date());
             bean.setRecycle("0");
-            toDB(bean);
+            toSucDB(bean);
             toSolr(bean);
+        }else if(resultItems.get("err") != null){
+            ErrBean bean = (ErrBean) resultItems.get("err");
+
+            bean.setCreateDate(new Date());
+            bean.setRecycle("0");
+            toErrDB(bean);
         }
     }
 
@@ -64,9 +73,12 @@ public class MysqlPipeline implements Pipeline {
         }
     }
 
-    private void toDB(YunBean bean) {
+    private void toSucDB(YunBean bean) {
         bean.setId(UUID.randomUUID().toString());
         beanMapper.insert(bean);
+    }
+    private void toErrDB(ErrBean bean) {
+        errBeanMapper.insert(bean);
     }
 
     public static String getPrintSize(long size) {

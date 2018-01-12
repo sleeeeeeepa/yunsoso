@@ -93,9 +93,9 @@
 //                window.location.href="/findAll/"+page_index*20;
                 var kw = $("#kw").val();
                 if(kw==undefined){
-                    window.location.href="/findAll/"+page_index*20;
+                    window.location.href="/findAll/"+page_index;
                 }else {
-                    document.getElementById('result_list').action = "/find/"+kw+"/"+page_index*20;
+                    document.getElementById('result_list').action = "/find/"+kw+"/"+page_index;
                     $('#result_list').submit();
                 }
             }

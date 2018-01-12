@@ -3,16 +3,14 @@ package com.yss.yunsoso.spdier;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.yss.yunsoso.domain.ErrBean;
 import com.yss.yunsoso.domain.YunBean;
 import com.yss.yunsoso.utils.SpringUtil;
 import org.jsoup.nodes.Element;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.data.redis.core.RedisOperations;
+import org.slf4j.Logger;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -26,18 +24,15 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-//@Component
 public class BaiduYunFindFileFromBaidu implements PageProcessor {
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(BaiduYunFindFileFromBaidu.class);
 
-//    @Autowired
     private static StringRedisTemplate stringRedisTemplate;
 
-//    @Autowired
     private static RedisTemplate redisTemplate;
 
     //添加count计数器  需要每个请求重置，spring注入对象暂无法实现 ， 此处手动实例化
@@ -96,6 +91,9 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
     }
 
     public void process(Page page) {
+        logger.debug("==== 处理数据 ====");
+        logger.debug("url:"+page.getUrl());
+
         if(page==null) return;
 
         //链接中获取关键字
@@ -137,7 +135,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
         for (String errMes : errPage) {
             if(share_nofound_des.regex(errMes).match()){
                 System.out.println("错误页面///////////////");
-                page.setSkip(true);
+                insertDBErr(page.getUrl().get(),errMes);
                 return false;
             }
         }
@@ -190,7 +188,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                     bean.setFormat(format);
                     bean.setKeyWord(kw);
                     System.out.println(bean);
-                    insertDB(bean);
+                    insertDBSuc(bean);
                 }
             }
         }catch (NullPointerException e) {
@@ -235,7 +233,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                         bean.setKeyWord(kw);
                         bean.setUrl(url);
 
-                        insertDB(bean);
+                        insertDBSuc(bean);
                         break;
                     }
                 }
@@ -264,7 +262,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                     String url = page.getUrl().get().replaceFirst("list", "link");
                     bean.setUrl(url);
                     System.out.println(bean);
-                    insertDB(bean);
+                    insertDBSuc(bean);
                     return;
                 }
             }else if(!regex.match() && page.getUrl().get().contains(PAN_BAIDU_COM)){  //非首次进入 但地址为百度云
@@ -321,8 +319,17 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
     }
 
     //添加到pipline  同一入库
-    public void insertDB(YunBean bean){
+    public void insertDBSuc(YunBean bean){
         page.putField("bean",bean);
+    }
+    //添加到pipline  同一入库
+    public void insertDBErr(String url , String reason){    //地址 原因
+        page.getUrl().get();
+        ErrBean errBean = new ErrBean();
+        errBean.setKeyword(kw);
+        errBean.setReason(reason);
+        errBean.setUrl(url);
+        page.putField("err",errBean);
     }
 
     /**
