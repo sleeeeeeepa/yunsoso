@@ -25,8 +25,12 @@ CREATE TABLE `yun_bean` (
   `url` varchar(1000) DEFAULT NULL,
   `format` varchar(10) DEFAULT NULL,
   `size` varchar(10) DEFAULT NULL,
+  `size_format` varchar(10) DEFAULT NULL,
   `author` varchar(8) DEFAULT NULL,
+  `keyWord` varchar(50) DEFAULT NULL,
   `upload_date` timestamp NULL DEFAULT NULL,
   `failure_date` timestamp NULL DEFAULT NULL,
+  `create_date` timestamp NULL DEFAULT NULL,
+  `recycle` VARCHAR(2)	NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
