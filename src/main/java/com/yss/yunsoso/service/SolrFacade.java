@@ -1,7 +1,7 @@
 package com.yss.yunsoso.service;
 
 public interface SolrFacade {
-   public String  getResults (String keyword,Integer index , Integer pageSize);
+   public String  getResults(String keyword, Integer index);
 
-    String getResults(Integer pageSize, Integer size);
+    String getResults(Integer pageSize);
 }

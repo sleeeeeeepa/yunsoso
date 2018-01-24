@@ -1,9 +1,9 @@
 spring:
     datasource:
         name: yunsoso
-        url: jdbc:mysql://103.11.65.253:3306/yunsoso?useUnicode=true&characterEncoding=UTF-8
+        url: jdbc:mysql://118.126.100.245:3306/yunsoso?useUnicode=true&characterEncoding=UTF-8
         username: root
-        password: root
+        password: 631617479
         # 使用druid数据源
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
@@ -20,13 +20,3 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxOpenPreparedStatements: 20
-
-#jedis :
-# pool :
-#   host : 127.0.0.1
-#   port : 6379
-#   config :
-#     maxTotal: 100
-#     maxIdle: 10
-#     maxWaitMillis : 100000
-#
