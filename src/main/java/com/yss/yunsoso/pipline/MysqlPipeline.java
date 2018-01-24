@@ -58,8 +58,8 @@ public class MysqlPipeline implements Pipeline {
         Pattern p = Pattern.compile(format);
         Matcher m = p.matcher(otherConfig.pictureFormat);
         while(m.find())
-            return false;
-        return true;
+            return true;
+        return false;
     }
 
     private void toSolr(YunBean bean) {
