@@ -43,10 +43,10 @@ public class SpiderFacadeImpl implements SpiderFacade {
 
             for (int i = 0; i < searchPage; i++) {
                 String url = ("https://www.baidu.com/s?wd="+moviesName+postfix+"&pn="+i+"0");
-//                String url = ("https://pan.baidu.com/s/1mirmzA4");
+//                String url = ("https://pan.baidu.com/s/1dFOOpmL");
                 Spider.create(new BaiduYunFindFileFromBaidu())
                         .addUrl(url)
-                        .setDownloader(new PhantomJSDownloader(phantomjsPath))
+                        .setDownloader(new PhantomJSDownloader(phantomjsPath,"/root/yss/crawl.js"))
                         .thread(1)
                         .addPipeline(mysqlPipeline)
                         .run();
