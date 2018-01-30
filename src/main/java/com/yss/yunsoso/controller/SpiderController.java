@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.Set;
 
 /**
  * Created by beyondLi on otherConfig.pageSize17/6/19.
@@ -99,7 +100,14 @@ public class SpiderController {
     public String redis_test()  {
         ZSetOperations zSetOperations = redisTemplate.opsForZSet();
         zSetOperations.add("11", "22", 1.0);
-        zSetOperations.incrementScore("11", "xuexusheng", 3.0);
+        zSetOperations.incrementScore("11", "xuexusheng", 1.0);
+        zSetOperations.incrementScore("11", "xuexusheng2", 4.0);
+        zSetOperations.incrementScore("11", "xuexusheng3", 3.0);
+        zSetOperations.incrementScore("11", "xuexusheng4", 2.0);
+
+        Set range = zSetOperations.range("11", 0, -1);
+        zSetOperations.remove("11","xuexusheng");
+
 
         return null;
     }
