@@ -1,23 +1,14 @@
 package com.yss.yunsoso.controller;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.yss.yunsoso.config.OtherConfig;
-import com.yss.yunsoso.dao.YunBeanMapper;
+import com.yss.yunsoso.service.RedisFacade;
 import com.yss.yunsoso.service.SolrFacade;
 import com.yss.yunsoso.service.SpiderFacade;
-import org.apache.log4j.spi.LoggerFactory;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,29 +16,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 
 /**
  * Created by beyondLi on otherConfig.pageSize17/6/19.
  */
 //证明是controller层并且返回json
 @Controller
-public class UserController {
+public class SpiderController {
 
-    private static final Logger  logger = org.slf4j.LoggerFactory.getLogger(UserController.class);
+    private static final Logger  logger = org.slf4j.LoggerFactory.getLogger(SpiderController.class);
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
     @Resource
-    SpiderFacade spderfaFacade;
+    SpiderFacade spiderFacade;
     @Autowired
     private SolrFacade solrFacade;
+    @Autowired
+    private RedisFacade redisFacade;
+    @Value("queue")
+    private String queue;
+
     @Resource
-    private OtherConfig otherConfig;
-    @Resource
-    private YunBeanMapper beanMapper;
+    private RedisTemplate redisTemplate;
+
 
     @RequestMapping(value = "/find/{kw}/{index}")
     public String find(@PathVariable String kw , @PathVariable Integer index , ModelMap map) {
@@ -58,10 +48,23 @@ public class UserController {
             map.put("totalItem", responseObject.get("total"));
             map.put("results", responseObject.getJSONArray("results"));
             map.put("kw", kw);
-        }else
-            spderfaFacade.getSpider(kw);
+            return "/list";
+        }else{
+            Boolean isok = redisFacade.addReidisQueue(queue, kw);
 
-        return "/list";
+//            siderFacade.getSpider(kw);
+        }
+
+
+        return "suc";
+    }
+
+    @RequestMapping(value = "/reserve/{kw}")
+    @ResponseBody
+    public String reserve(@PathVariable String kw ,  ModelMap map) {
+        Boolean isok = redisFacade.addReidisQueue(queue, kw);
+
+        return "suc";
     }
 
     @RequestMapping(value = "/findAll/{index}")
@@ -78,6 +81,8 @@ public class UserController {
     }
 
 
+
+
     @RequestMapping(value = "/index")
     public String index() {
         return "/search";
@@ -91,8 +96,11 @@ public class UserController {
 
     @RequestMapping(value = "/redis_test")
     @ResponseBody
-    public String redis_test() throws Exception {
+    public String redis_test()  {
+        ZSetOperations zSetOperations = redisTemplate.opsForZSet();
+        zSetOperations.add("11", "22", 1.0);
+        zSetOperations.incrementScore("11", "xuexusheng", 3.0);
+
         return null;
-//
     }
 }

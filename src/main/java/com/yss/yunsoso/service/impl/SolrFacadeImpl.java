@@ -2,8 +2,6 @@ package com.yss.yunsoso.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.yss.yunsoso.config.OtherConfig;
-import com.yss.yunsoso.controller.UserController;
 import com.yss.yunsoso.service.SolrFacade;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -14,10 +12,8 @@ import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 
 @Service
