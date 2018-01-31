@@ -48,7 +48,7 @@
                         ${item.yun_sizeFormat}
                         </td>
                         <td>
-                        ${item.yun_url}
+                            <a href="${item.yun_url}">${item.yun_url}</a>
                         </td>
                         <td>
                         ${item.yun_keyWord}
