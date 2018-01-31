@@ -8,13 +8,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement//开启事务管理
-public class YunsosoApplication extends SpringBootServletInitializer {
+public class YunsosoApplication {
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+	//@Override
+	//protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 		// 此处Application.class替换为springboot默认启动类
-		return builder.sources(YunsosoApplication.class);
-	}
+	//	return builder.sources(YunsosoApplication.class);
+	//}
 
 	public static void main(String[] args) {
 		SpringApplication.run(YunsosoApplication.class, args);

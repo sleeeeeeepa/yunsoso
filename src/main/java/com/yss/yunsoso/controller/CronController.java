@@ -19,7 +19,7 @@ public class CronController {
     SpiderFacade spiderFacade;
     @Autowired
     private RedisFacade redisFacade;
-    @Value("queue")
+    @Value("${queuekey}")
     private String queue;
 
     @RequestMapping(value = "/do_spider")

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Set;
 
 /**
  * Created by beyondLi on otherConfig.pageSize17/6/19.
@@ -33,7 +32,7 @@ public class SpiderController {
     private SolrFacade solrFacade;
     @Autowired
     private RedisFacade redisFacade;
-    @Value("queue")
+    @Value("${queuekey}")
     private String queue;
 
     @Resource
@@ -60,12 +59,25 @@ public class SpiderController {
         return "suc";
     }
 
+    //预约关键字
     @RequestMapping(value = "/reserve/{kw}")
     @ResponseBody
-    public String reserve(@PathVariable String kw ,  ModelMap map) {
+    public String reserve(@PathVariable String kw) {
         Boolean isok = redisFacade.addReidisQueue(queue, kw);
 
         return "suc";
+    }
+
+    //检查solr是否有该关键字数据
+    @RequestMapping(value = "/checkThisKeyword/{kw}")
+    @ResponseBody
+    public String checkThisKeyword(@PathVariable String kw) {
+        String results = solrFacade.getResults(kw, 0);
+        if(results==null){  //solr未储存 加入队列
+            redisFacade.addReidisQueue(queue, kw);
+            return "0";
+        }
+        return "1";
     }
 
     @RequestMapping(value = "/findAll/{index}")
@@ -76,7 +88,6 @@ public class SpiderController {
         map.put("currentPage", responseObject.get("currPage"));
         map.put("totalItem", responseObject.get("total"));
         map.put("results", responseObject.getJSONArray("results"));
-
 
         return "/list";
     }
@@ -99,15 +110,8 @@ public class SpiderController {
     @ResponseBody
     public String redis_test()  {
         ZSetOperations zSetOperations = redisTemplate.opsForZSet();
-        zSetOperations.add("11", "22", 1.0);
-        zSetOperations.incrementScore("11", "xuexusheng", 1.0);
-        zSetOperations.incrementScore("11", "xuexusheng2", 4.0);
-        zSetOperations.incrementScore("11", "xuexusheng3", 3.0);
-        zSetOperations.incrementScore("11", "xuexusheng4", 2.0);
-
-        Set range = zSetOperations.range("11", 0, -1);
-        zSetOperations.remove("11","xuexusheng");
-
+        zSetOperations.incrementScore("reserve_kw", "复仇者联盟", 1.0);
+        zSetOperations.incrementScore("reserve_kw", "金刚狼", 4.0);
 
         return null;
     }

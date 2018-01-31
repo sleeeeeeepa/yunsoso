@@ -14,7 +14,7 @@
 </head>
 <body>
 <#--  搜索主体 -->
-<form onSubmit="submitFn(this, event);" action="" id="search">
+<form onsubmit="submitFn(this, event);" action="" id="search">
 	<div class="search-wrapper">
 		<div class="input-holder">
 			<input type="text" class="search-input" placeholder="请输入关键词" id="kw"/>
@@ -47,6 +47,7 @@ function searchToggle(obj, evt){
 		  // clear and hide result container when we press close
 		  container.find('.result-container').fadeOut(100, function(){$(this).empty();});
 	}
+
 }
 
 function submitFn(obj, evt){
@@ -56,9 +57,26 @@ function submitFn(obj, evt){
 	if(!value.length){
 		_html = "关键词不能为空。";
 	} else{
-		_html += "<b>" + value + "</b>";
-        document.getElementById('search').action = "/find/"+value+"/0";
-        return true;
+        $.ajax({
+            type: "post",
+            url: "/checkThisKeyword/"+value,
+			data:{},
+            dataType: "text",
+            async : false,
+            success: function(data){
+				if(data=='0'){	//未储存
+				    alert("抱歉【"+value+"】未储存，已为您加入查询队列，明天再来看看吧！")
+				}else{
+				    alert();
+                    var rootPath = getRootPath();
+				    window.open("/find/"+value+"/0");
+            }
+            },
+            error: function(data) {
+				alert(data)
+            }
+        });
+        return false;
 	}
 
 	$(obj).find('.result-container').html('<span>' + _html + '</span>');
@@ -69,6 +87,17 @@ function submitFn(obj, evt){
 
 function findAll() {
     window.location.href="/findAll/0";
+}
+
+
+function getRootPath() {
+    //获取当前网址，如： http://localhost:80/ybzx/index.jsp
+    var curPath = window.document.location.href;
+    //获取主机地址之后的目录，如： ybzx/index.jsp
+    var pathName = window.document.location.pathname;
+    var pos = curPath.indexOf(pathName);
+    //获取主机地址，如： http://localhost:80
+    return curPath.substring(0, pos);
 }
 </script>
 
