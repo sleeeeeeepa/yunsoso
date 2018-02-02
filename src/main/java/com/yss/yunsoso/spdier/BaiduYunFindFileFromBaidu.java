@@ -35,7 +35,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
 
     private static RedisTemplate redisTemplate;
 
-    //添加count计数器  需要每个请求重置，spring注入对象暂无法实现 ， 此处手动实例化
+    //添加count计数器  需要每个请求重置 ， 此处手动实例化
     static {
         redisTemplate = (RedisTemplate) SpringUtil.getBean("redisTemplate");
         stringRedisTemplate = (StringRedisTemplate) SpringUtil.getBean("stringRedisTemplate");
