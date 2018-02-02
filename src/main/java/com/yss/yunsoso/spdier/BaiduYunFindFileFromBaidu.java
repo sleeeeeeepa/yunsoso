@@ -109,7 +109,12 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
         }
 
         this.page = page;
-        Html html = page.getHtml();
+        Html html = null;
+        try {
+            html = page.getHtml();
+        } catch (NullPointerException e) {
+            return;
+        }
 
         //百度云
         if(page.getUrl().regex(PAN_BAIDU_COM).match()){
