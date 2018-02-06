@@ -47,16 +47,16 @@
                     <#list  results  as  item>
                     <tr>
                         <td>
-                        ${item.yun_fileName}
+                            ${item.yun_fileName}
                         </td>
                         <td>
-                        ${item.yun_sizeFormat}
+                            ${item.yun_sizeFormat}
                         </td>
                         <td>
-                            <a href="${item.yun_url}">${item.yun_url}</a>
+                            <a href="${item.yun_url}" target="_blank">${item.yun_url}</a>
                         </td>
                         <td>
-                        ${item.yun_keyWord}
+                            ${item.yun_keyWord}
                         </td>
                     </tr>
                     </#list>
