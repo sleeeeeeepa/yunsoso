@@ -16,7 +16,12 @@
 
     <#if kw??>
         <input type="hidden" value="${kw}" id="kw"/>
+
+         <div onclick="reserve()" style="float: right;">
+             <a  href="javascript:void(0);">结果不理想？戳此预约！</a>
+         </div>
     </#if>
+
 
     <div class="container">
         <div class="row clearfix">
@@ -62,7 +67,7 @@
         </div>
     </div>
 </form>
-<div id="Pagination" class="pagination"><!-- 这里显示分页 --></div>
+<div id="Pagination" class="pagination" style="width:100% ;align:center;"><!-- 这里显示分页 --></div>
 
 <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
 <script src="/static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
@@ -90,7 +95,6 @@
 
         function pageselectCallback(page_index, jq){
             if(page_index!=currpage){
-//                window.location.href="/findAll/"+page_index*20;
                 var kw = $("#kw").val();
                 if(kw==undefined){
                     window.location.href="/findAll/"+page_index;
@@ -102,6 +106,26 @@
             return false;
         }
     });
+
+    function reserve() {
+        $.ajax({
+            type: "post",
+            url: "/reserve/${kw}",
+            data:{},
+            dataType: "text",
+            async : false,
+            success: function(data){
+                if(data=='suc'){	//未储存
+                    alert("【${kw}】预约成功！")
+                }else{
+                    alert("预约失败")
+                }
+            },
+            error: function(data) {
+                alert(data)
+            }
+        });
+    }
 </script>
 
 
