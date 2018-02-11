@@ -18,7 +18,7 @@ public class YunBean {
     private String format;
 
     @Field("yun_size")
-    private String size;
+    private Long size;
 
     @Field("yun_sizeFormat")
     private String sizeFormat;
@@ -28,6 +28,8 @@ public class YunBean {
 
     @Field("yun_keyWord")
     private String keyWord;
+
+    private String lockUrl;
 
     private Date uploadDate;
 
@@ -69,12 +71,12 @@ public class YunBean {
         this.format = format == null ? null : format.trim();
     }
 
-    public String getSize() {
+    public Long getSize() {
         return size;
     }
 
-    public void setSize(String size) {
-        this.size = size == null ? null : size.trim();
+    public void setSize(Long size) {
+        this.size = size == null ? null : size;
     }
 
     public String getSizeFormat() {
@@ -123,6 +125,14 @@ public class YunBean {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public String getLockUrl() {
+        return lockUrl;
+    }
+
+    public void setLockUrl(String lockUrl) {
+        this.lockUrl = lockUrl == null ? null : lockUrl.trim();
     }
 
     public String getRecycle() {
