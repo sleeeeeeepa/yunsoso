@@ -67,7 +67,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
     String kw = "";
 
     public static void main(String[] args) {
-        String s = "复仇者联盟";
+        String s = "傲慢与偏见";
         String moviesName = "\""+s+"\" ";
         String postfix = "\"pan.baidu.com\"";
         try {
@@ -97,7 +97,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
         if(page==null) return;
 
         //链接中获取关键字
-        //框架提供的正则在处理(?<=wd=).*(?=&) 此类时指针越界
+//        框架提供的正则在处理(?<=wd=).*(?=&) 此类时指针越界
         if(count==0){
             try {
                 String kw_gb2312 = URLDecoder.decode(getRegex(page.getUrl().get(), "(?<=wd=).*(?=&)"), "gb2312");
@@ -184,7 +184,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                     YunBean bean = new YunBean();
                     String server_filename = jsonObject.getString("server_filename");
                     String format = server_filename.substring(server_filename.lastIndexOf("."), server_filename.length());
-                    String size = jsonObject.getString("size");
+                    Long size = jsonObject.getLong("size");
                     String url = page.getUrl().get().replaceFirst("list", "link");
 
                     bean.setFileName(server_filename);
@@ -228,7 +228,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                     }else if (jsonObject.getInteger("isdir")==0){
                         YunBean bean = new YunBean();
                         String server_filename = jsonObject.getString("server_filename");
-                        String size = jsonObject.getString("size");
+                        Long size = jsonObject.getLong("size");
                         bean.setFileName(server_filename);
                         String format = server_filename.substring(server_filename.lastIndexOf("."), server_filename.length());
                         String url = page.getUrl().get().replaceFirst("list", "link");
@@ -242,8 +242,15 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                         break;
                     }
                 }
-            }else if(html.xpath("//*[@id=\"kcih9Yxx\"]/div[2]/form/div[2]/dl[1]/dt").match()){      //加密  直接输出，后期获取密码
-                System.out.println(page.getUrl().get().replaceFirst("list","link"));
+            }else if(html.xpath("//*[@class='pickpw clearfix']").match()){
+                // todo 加密路径 , 返回百度搜索该地址的url , 在页面找密码
+//                System.out.println("加密url : "+page.getUrl().get().replaceFirst("list","link"));
+                YunBean bean = new YunBean();
+                bean.setKeyWord(kw);
+                bean.setUrl(page.getUrl().get());
+                bean.setLockUrl("https://www.baidu.com/s?wd="+page.getUrl().get());
+                insertDBSuc(bean);
+                return;
 
             }else if(html.regex("yunData.setData.*?];").match()){   //直接播放
                 Selectable regex1 = html.regex("yunData.setData.*?\\);");
@@ -256,7 +263,7 @@ public class BaiduYunFindFileFromBaidu implements PageProcessor {
                     YunBean bean = new YunBean();
                     for (Object o : file_list) {
                         JSONObject o1 = JSONObject.parseObject(o.toString());
-                        String size = o1.getString("size");
+                        Long size = o1.getLong("size");
                         bean.setSize(size);
                         String server_filename = o1.getString("server_filename");
                         String format = server_filename.substring(server_filename.lastIndexOf("."), server_filename.length());
