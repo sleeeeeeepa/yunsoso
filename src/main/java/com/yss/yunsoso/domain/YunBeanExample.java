@@ -395,62 +395,52 @@ public class YunBeanExample {
             return (Criteria) this;
         }
 
-        public Criteria andSizeEqualTo(String value) {
+        public Criteria andSizeEqualTo(Long value) {
             addCriterion("size =", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeNotEqualTo(String value) {
+        public Criteria andSizeNotEqualTo(Long value) {
             addCriterion("size <>", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeGreaterThan(String value) {
+        public Criteria andSizeGreaterThan(Long value) {
             addCriterion("size >", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeGreaterThanOrEqualTo(String value) {
+        public Criteria andSizeGreaterThanOrEqualTo(Long value) {
             addCriterion("size >=", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeLessThan(String value) {
+        public Criteria andSizeLessThan(Long value) {
             addCriterion("size <", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeLessThanOrEqualTo(String value) {
+        public Criteria andSizeLessThanOrEqualTo(Long value) {
             addCriterion("size <=", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeLike(String value) {
-            addCriterion("size like", value, "size");
-            return (Criteria) this;
-        }
-
-        public Criteria andSizeNotLike(String value) {
-            addCriterion("size not like", value, "size");
-            return (Criteria) this;
-        }
-
-        public Criteria andSizeIn(List<String> values) {
+        public Criteria andSizeIn(List<Long> values) {
             addCriterion("size in", values, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeNotIn(List<String> values) {
+        public Criteria andSizeNotIn(List<Long> values) {
             addCriterion("size not in", values, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeBetween(String value1, String value2) {
+        public Criteria andSizeBetween(Long value1, Long value2) {
             addCriterion("size between", value1, value2, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeNotBetween(String value1, String value2) {
+        public Criteria andSizeNotBetween(Long value1, Long value2) {
             addCriterion("size not between", value1, value2, "size");
             return (Criteria) this;
         }
@@ -662,6 +652,76 @@ public class YunBeanExample {
 
         public Criteria andKeyWordNotBetween(String value1, String value2) {
             addCriterion("key_word not between", value1, value2, "keyWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlIsNull() {
+            addCriterion("lock_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlIsNotNull() {
+            addCriterion("lock_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlEqualTo(String value) {
+            addCriterion("lock_url =", value, "lockUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlNotEqualTo(String value) {
+            addCriterion("lock_url <>", value, "lockUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlGreaterThan(String value) {
+            addCriterion("lock_url >", value, "lockUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("lock_url >=", value, "lockUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlLessThan(String value) {
+            addCriterion("lock_url <", value, "lockUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlLessThanOrEqualTo(String value) {
+            addCriterion("lock_url <=", value, "lockUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlLike(String value) {
+            addCriterion("lock_url like", value, "lockUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlNotLike(String value) {
+            addCriterion("lock_url not like", value, "lockUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlIn(List<String> values) {
+            addCriterion("lock_url in", values, "lockUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlNotIn(List<String> values) {
+            addCriterion("lock_url not in", values, "lockUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlBetween(String value1, String value2) {
+            addCriterion("lock_url between", value1, value2, "lockUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockUrlNotBetween(String value1, String value2) {
+            addCriterion("lock_url not between", value1, value2, "lockUrl");
             return (Criteria) this;
         }
 
