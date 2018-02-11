@@ -41,22 +41,29 @@
                         <th>
                             来源关键字
                         </th>
+                        <th>
+                            密码url
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <#list  results  as  item>
                     <tr>
                         <td>
-                            ${item.yun_fileName}
+                            <#if item.yun_lockUrl?? && item.yun_lockUrl!=""><font color="red">[密]</font></#if>
+                            <#if item.yun_fileName!=""> ${item.yun_fileName} <#else> - </#if>
                         </td>
                         <td>
-                            ${item.yun_sizeFormat}
+                            <#if item.yun_sizeFormat!=""> ${item.yun_sizeFormat} <#else> - </#if>
                         </td>
                         <td>
-                            <a href="${item.yun_url}" target="_blank">${item.yun_url}</a>
+                            <#if item.yun_url!=""> <a href="${item.yun_url}" target="_blank">${item.yun_url}</a> <#else> - </#if>
                         </td>
                         <td>
-                            ${item.yun_keyWord}
+                            <#if item.yun_keyWord!=""> ${item.yun_keyWord} <#else> - </#if>
+                        </td>
+                        <td>
+                            <#if item.yun_lockUrl?? && item.yun_lockUrl!=""> ${item.yun_lockUrl} <#else> - </#if>
                         </td>
                     </tr>
                     </#list>
@@ -110,13 +117,13 @@
     function reserve() {
         $.ajax({
             type: "post",
-            url: "/reserve/${kw}",
+            url: "/reserve/"+$("#kw"),
             data:{},
             dataType: "text",
             async : false,
             success: function(data){
                 if(data=='suc'){	//未储存
-                    alert("【${kw}】预约成功！")
+                    alert("【"+$("#kw")+"】预约成功！")
                 }else{
                     alert("预约失败")
                 }
