@@ -28,7 +28,7 @@ public class YunBean {
 
     @Field("yun_keyWord")
     private String keyWord;
-
+    @Field("yun_lockUrl")
     private String lockUrl;
 
     private Date uploadDate;
