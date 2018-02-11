@@ -40,7 +40,7 @@ public class MysqlPipeline implements Pipeline {
 
             if(isExist(format))return;  //如果是图片格式不保存
 
-            bean.setSizeFormat(getPrintSize(Long.parseLong(bean.getSize())));
+            bean.setSizeFormat(getPrintSize(bean.getSize()));
             bean.setCreateDate(new Date());
             bean.setRecycle("0");
             toSucDB(bean);
