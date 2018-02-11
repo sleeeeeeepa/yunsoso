@@ -25,6 +25,8 @@ public class SpiderFacadeImpl implements SpiderFacade {
     private String phantomjsPath;
     @Value("${searchPage}")
     private Integer searchPage;
+    @Value("${crwalPath}")
+    private String crwalPath;
 
     @Resource
     private MysqlPipeline mysqlPipeline;
@@ -40,11 +42,11 @@ public class SpiderFacadeImpl implements SpiderFacade {
             System.out.println(moviesName);
 
             for (int i = 0; i < searchPage; i++) {
-                String url = ("https://www.baidu.com/s?wd="+moviesName+postfix+"&pn="+i+"0");
-//                String url = ("https://pan.baidu.com/s/1dFOOpmL");
+//                String url = ("https://www.baidu.com/s?wd="+moviesName+postfix+"&pn="+i+"0");
+                String url = ("http://pan.baidu.com/s/1pJ6XYHl");
                 Spider.create(new BaiduYunFindFileFromBaidu())
                         .addUrl(url)
-                        .setDownloader(new PhantomJSDownloader(phantomjsPath,"/root/yss/crawl.js"))
+                        .setDownloader(new PhantomJSDownloader(phantomjsPath,crwalPath))
                         .thread(1)
                         .addPipeline(mysqlPipeline)
                         .run();
