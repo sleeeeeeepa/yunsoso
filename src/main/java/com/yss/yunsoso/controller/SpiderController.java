@@ -59,7 +59,11 @@ public class SpiderController {
         return "suc";
     }
 
-    //预约关键字
+    /**
+     * 预约授权关键字
+     * @param kw
+     * @return
+     */
     @RequestMapping(value = "/reserve/{kw}")
     @ResponseBody
     public String reserve(@PathVariable String kw) {
