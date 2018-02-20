@@ -22,6 +22,10 @@ public class CronController {
     @Value("${queuekey}")
     private String queue;
 
+    /**
+     * 开始执行爬虫
+     * @return
+     */
     @RequestMapping(value = "/do_spider")
     @ResponseBody
     public String doSpider() {
